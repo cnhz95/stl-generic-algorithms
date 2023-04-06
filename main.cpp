@@ -6,7 +6,7 @@
 #include <algorithm>
 #include <numeric>
 
-struct MyPrint {
+struct Print {
     void operator()(const Car& car) const {
         std::cout << "Name: " << car.getName() << "\tSpeed: " << car.getSpeed() << '\n';
     }
@@ -25,20 +25,20 @@ struct CompSpeed {
 	}
 };*/
 
-struct MyBinOp {
+struct BinOp {
     constexpr double operator()(const double lhs, const Car& rhs) const {
         return lhs + rhs.getSpeed();
     }
 };
 
-struct MyUnOp {
+struct UnOp {
     constexpr double operator()(const Car& car) const {
         return car.getSpeed();
     }
 };
 
-struct MyFunc {
-    explicit MyFunc(double mean) : m_mean(mean) {}
+struct Func {
+    explicit Func(double mean) : m_mean(mean) {}
     constexpr double operator()(const double val) const {
         return val - m_mean;
     }
@@ -61,7 +61,7 @@ int main() {
 
 
     std::cout << "1.\n";
-    MyPrint print;
+    Print print;
     std::for_each(cars.begin(), cars.end(), print);
 
 
@@ -88,8 +88,8 @@ int main() {
 
 
     std::cout << "\n4.\n";
-    std::cout << (std::equal(cars.begin(), cars.end(), carr) ?
-        "The contents are equal\n" : "The contents differ\n");
+    std::cout << (std::equal(cars.begin(), cars.end(), carr)
+        ? "The contents are equal\n" : "The contents differ\n");
 
 
     std::cout << "\n5.\n";
@@ -99,16 +99,16 @@ int main() {
 
 
     std::cout << "\n6.\n";
-    double sum = std::accumulate(cars.begin(), cars.end(), 0.0, MyBinOp());
+    double sum = std::accumulate(cars.begin(), cars.end(), 0.0, BinOp());
     double mean = sum / cars.size();
     std::cout << "Mean speed: " << mean << '\n';
 
 
     std::vector<double> v2(cars.size());
-    std::transform(cars.begin(), cars.end(), v2.begin(), MyUnOp());
+    std::transform(cars.begin(), cars.end(), v2.begin(), UnOp());
 
 
-    std::transform(v2.begin(), v2.end(), v2.begin(), MyFunc(mean));
+    std::transform(v2.begin(), v2.end(), v2.begin(), Func(mean));
 
 
     std::cout << "\nLast.\n";
